@@ -16,3 +16,8 @@ coverage/
 
 # Paperclip-injected
 CLAUDE.md
+
+# Leaked local tooling (1Password CLI, system commandline, Node compile cache)
+com.agilebits.op.*/
+system-commandline-sentinel-files/
+node-compile-cache/

@@ -67,15 +67,15 @@ If you exceeded 30 minutes, that's a bug in this onboarding — open an issue ag
 
 ### Required scripts
 
-| Script | What it does |
-|---|---|
-| `pnpm lint` | ESLint (flat config) — blocking |
-| `pnpm format` | Prettier check — blocking |
-| `pnpm typecheck` | `tsc -b` across workspaces |
-| `pnpm test` | Vitest across workspaces |
-| `pnpm ci` | All of the above in one shot — run this before pushing |
-| `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main` |
-| `scripts/prune-worktrees.sh` | Remove merged/old worktrees (runs nightly in CI cron) |
+| Script                                 | What it does                                           |
+| -------------------------------------- | ------------------------------------------------------ |
+| `pnpm lint`                            | ESLint (flat config) — blocking                        |
+| `pnpm format`                          | Prettier check — blocking                              |
+| `pnpm typecheck`                       | `tsc -b` across workspaces                             |
+| `pnpm test`                            | Vitest across workspaces                               |
+| `pnpm ci`                              | All of the above in one shot — run this before pushing |
+| `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main`        |
+| `scripts/prune-worktrees.sh`           | Remove merged/old worktrees (runs nightly in CI cron)  |
 
 ## Branching model
 
