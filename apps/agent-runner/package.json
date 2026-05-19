@@ -1,0 +1,14 @@
+{
+  "name": "@sof/agent-runner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'TODO: tsx watch src/index.ts'",
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sof/shared": "workspace:*"
+  }
+}

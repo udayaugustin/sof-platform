@@ -1,0 +1,14 @@
+{
+  "name": "@sof/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'TODO: next dev'",
+    "build": "echo 'TODO: next build'",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sof/shared": "workspace:*"
+  }
+}

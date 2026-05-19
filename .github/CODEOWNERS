@@ -1,0 +1,9 @@
+# Default: CTO reviews until specialized owners are hired
+*               @software-company-ai/cto
+
+# Architecture decisions: CTO + CEO
+/docs/adr/      @software-company-ai/cto @software-company-ai/ceo
+
+# CI/infra
+/.github/       @software-company-ai/cto
+/fly.toml       @software-company-ai/cto
