@@ -36,8 +36,8 @@ For a fresh Coder agent (human or AI). Each step is timed against a 30-minute to
 
 ```bash
 # 0 — Clone the repo                                                 (~30s)
-git clone git@github.com:software-company-ai/sof.git
-cd sof
+git clone https://github.com/udayaugustin/sof-platform.git
+cd sof-platform
 
 # 1 — Install dependencies (pnpm store is content-addressable, fast) (~60s)
 pnpm install --frozen-lockfile

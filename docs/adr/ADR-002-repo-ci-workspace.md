@@ -17,7 +17,7 @@ The bar: **a new engineering agent — human or AI — should go from clone to f
 
 | Layer | Choice | Reversibility |
 |---|---|---|
-| Repo hosting | **GitHub** under org `software-company-ai`, primary repo `sof` | Two-way door (mirror to GitLab if needed) |
+| Repo hosting | **GitHub** at `udayaugustin/sof-platform` (public). v0 placement; will migrate to a `software-company-ai` org when we onboard the second engineer. | Two-way door (mirror to GitLab if needed; GitHub repo transfer is also one-click) |
 | Repo layout | **Monorepo (pnpm workspaces)**: `apps/web`, `apps/agent-runner`, `packages/shared`, `docs/adr/`, `scripts/` | Two-way door (split later behind clean package boundaries) |
 | Branching model | **Trunk-based** — short-lived branches off `main`, squash-merge PRs, no long-lived release branches yet | Two-way door |
 | CI | **GitHub Actions** — single `ci.yml` running lint → format → typecheck → test → hello-world smoke on every PR + push to `main` | Two-way door |
@@ -33,7 +33,7 @@ The bar: **a new engineering agent — human or AI — should go from clone to f
 
 GitHub gives us mature CI runners, the broadest agent/SDK ecosystem support (CODEOWNERS, gh CLI, Actions, GraphQL API), and is what every coder agent and human contributor already knows. We don't need novel infra here — we need predictable infra that any new agent can be onboarded against in one heartbeat. *Boring infra; Time-to-first-PR; AI-native by default (gh CLI is the most agent-friendly forge API on the market).*
 
-Provisioning is out-of-scope for me: see "Open questions for CEO" below.
+**Actual placement (2026-05-19):** the repo lives at [`udayaugustin/sof-platform`](https://github.com/udayaugustin/sof-platform), provisioned by the CEO in [SOF-10](/SOF/issues/SOF-10) under the founder's personal GitHub account. CEO chose **public** for v0 (the original plan said private); kept because the codebase is greenfield with no secrets, and public exposure surfaces the wedge product earlier. The original `software-company-ai/sof` placement is deferred — a GitHub repo transfer is one-click and we'll cut over when we onboard the second human engineer. **Branch protection on `main`** is already wired per §6 below: required checks `lint`, `typecheck`, `test`, `hello-world-smoke`, strict mode, 1 approving review, linear history, no force-push.
 
 ### 2. Layout: pnpm monorepo
 
@@ -89,7 +89,7 @@ We will measure TTPR for every newly-hired coder agent and record it in the hiri
 - [x] `.github/workflows/ci.yml` defines the merge gate.
 - [x] `apps/web`, `apps/agent-runner`, `packages/shared` packages compile and have at least one passing test.
 - [x] `scripts/new-worktree.sh` exists and is documented in the README.
-- [ ] First trivial PR merged through GitHub Actions on the real remote — **blocked on org/repo provisioning** (see child issue).
+- [x] First trivial PR merged through GitHub Actions on the real remote. Provisioning closed by [SOF-10](/SOF/issues/SOF-10); CTO-baseline TTPR recorded on [SOF-4](/SOF/issues/SOF-4) closing comment.
 
 ## References
 
