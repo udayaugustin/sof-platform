@@ -12,11 +12,16 @@ AI-native software engineering company. Monorepo for the product surface, the ag
 sof/
 ├── apps/
 │   ├── web/             # Next.js product surface (App Router)
-│   └── agent-runner/    # Node worker: Anthropic SDK + MCP-style tool contracts
+│   ├── agent-runner/    # Node worker: Anthropic SDK + MCP-style tool contracts
+│   └── worker/          # Queue consumer (skeleton)
 ├── packages/
+│   ├── db/              # Drizzle ORM schema + pgvector migrations
+│   ├── tool-contracts/  # JSON Schema for MCP-style tool contracts
 │   └── shared/          # Cross-cutting types and helpers
 ├── docs/adr/            # Architecture Decision Records (one-way doors)
 ├── scripts/             # new-worktree.sh, prune-worktrees.sh
+├── docker-compose.yml   # Postgres 16 + pgvector + Redis for local dev
+├── Makefile             # make dev / make test / make stop
 ├── .github/workflows/   # CI (GitHub Actions)
 └── pnpm-workspace.yaml
 ```
@@ -29,6 +34,21 @@ Foundation in [ADR-001](./docs/adr/ADR-001-foundation.md). Repo / CI / workspace
 - pnpm **9.12+** (`corepack enable && corepack prepare pnpm@9.12.0 --activate`)
 - Git **2.40+** (for `git worktree`)
 - Docker (for local Postgres + Redis — only needed when you boot the runner)
+
+## Local dev loop (`make dev`)
+
+```bash
+# 1 — Start Postgres 16 + pgvector + Redis, then all app dev servers
+make dev
+
+# 2 — Run tests
+make test
+
+# 3 — Tear down Docker services
+make stop
+```
+
+`make dev` runs `pnpm install` first, then `docker compose up -d` (Postgres + Redis), then `pnpm --parallel dev` across all apps.
 
 ## Clone → First PR in one heartbeat
 

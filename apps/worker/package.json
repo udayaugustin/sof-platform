@@ -1,0 +1,14 @@
+{
+  "name": "@sof/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sof/shared": "workspace:*"
+  }
+}

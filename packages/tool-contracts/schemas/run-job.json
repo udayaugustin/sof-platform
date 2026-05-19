@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sof.internal/tool-contracts/run-job",
+  "title": "RunJob",
+  "description": "MCP-style tool contract for submitting a job to the agent runner",
+  "type": "object",
+  "required": ["tool", "input"],
+  "properties": {
+    "tool": {
+      "type": "string",
+      "description": "Tool identifier"
+    },
+    "input": {
+      "type": "object",
+      "description": "Tool-specific input payload"
+    },
+    "tenant_region": {
+      "type": "string",
+      "description": "Region scope for tenant isolation"
+    }
+  },
+  "additionalProperties": false
+}
