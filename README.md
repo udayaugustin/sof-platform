@@ -12,11 +12,16 @@ AI-native software engineering company. Monorepo for the product surface, the ag
 sof/
 ├── apps/
 │   ├── web/             # Next.js product surface (App Router)
-│   └── agent-runner/    # Node worker: Anthropic SDK + MCP-style tool contracts
+│   ├── agent-runner/    # Node worker: Anthropic SDK + MCP-style tool contracts
+│   └── worker/          # Queue consumer (skeleton)
 ├── packages/
+│   ├── db/              # Drizzle ORM schema + pgvector migrations
+│   ├── tool-contracts/  # JSON Schema for MCP-style tool contracts
 │   └── shared/          # Cross-cutting types and helpers
 ├── docs/adr/            # Architecture Decision Records (one-way doors)
 ├── scripts/             # new-worktree.sh, prune-worktrees.sh
+├── docker-compose.yml   # Postgres 16 + pgvector + Redis for local dev
+├── Makefile             # make dev / make test / make stop
 ├── .github/workflows/   # CI (GitHub Actions)
 └── pnpm-workspace.yaml
 ```
@@ -29,6 +34,32 @@ Foundation in [ADR-001](./docs/adr/ADR-001-foundation.md). Repo / CI / workspace
 - pnpm **9.12+** (`corepack enable && corepack prepare pnpm@9.12.0 --activate`)
 - Git **2.40+** (for `git worktree`)
 - Docker (for local Postgres + Redis — only needed when you boot the runner)
+
+## Local dev loop (`make dev`)
+
+```bash
+# 1 — Start Postgres 16 + pgvector + Redis, then all app dev servers
+make dev
+
+# 2 — Run tests
+make test
+
+# 3 — Tear down Docker services
+make stop
+```
+
+`make dev` runs `pnpm install` first, then `docker compose up -d` (Postgres + Redis), then `pnpm --parallel dev` across all apps.
+
+## Before you push
+
+Run the same gate CI runs:
+
+```bash
+make check        # format → lint → typecheck → test
+# equivalent: pnpm check
+```
+
+On `pnpm install`, the `prepare` script points `core.hooksPath` at `.githooks/`, which installs a `pre-push` hook that runs `make check` automatically. If it fails, fix the issue and push again — do not bypass with `--no-verify` unless you have a documented reason.
 
 ## Clone → First PR in one heartbeat
 
@@ -74,6 +105,7 @@ If you exceeded 30 minutes, that's a bug in this onboarding — open an issue ag
 | `pnpm typecheck`                       | `tsc -b` across workspaces                             |
 | `pnpm test`                            | Vitest across workspaces                               |
 | `pnpm ci`                              | All of the above in one shot — run this before pushing |
+| `pnpm check` / `make check`            | Same gate as CI; also runs automatically via pre-push  |
 | `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main`        |
 | `scripts/prune-worktrees.sh`           | Remove merged/old worktrees (runs nightly in CI cron)  |
 

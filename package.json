@@ -14,7 +14,9 @@
     "format:fix": "prettier --write .",
     "test": "vitest run",
     "typecheck": "tsc -b",
-    "ci": "pnpm lint && pnpm format && pnpm typecheck && pnpm test"
+    "ci": "pnpm lint && pnpm format && pnpm typecheck && pnpm test",
+    "check": "pnpm format && pnpm lint && pnpm typecheck && pnpm test",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
     "@types/node": "^22.7.0",
