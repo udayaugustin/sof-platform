@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "echo 'TODO: tsx watch src/index.ts'",
     "build": "tsc -b",
-    "test": "vitest run"
+    "test": "vitest run",
+    "smoke": "vitest run"
   },
   "dependencies": {
-    "@sof/shared": "workspace:*"
+    "@sof/db": "workspace:*",
+    "@sof/shared": "workspace:*",
+    "@sof/tool-contracts": "workspace:*"
   }
 }
