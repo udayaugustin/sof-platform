@@ -7,16 +7,16 @@ This file is a stub. The canonical, revision-controlled copy of ADR-001 lives on
 
 ## Quick reference — binding decisions
 
-| Layer | Choice |
-|---|---|
-| Language | TypeScript (Node 22 LTS) |
-| Framework | Next.js (App Router) + Fastify for standalone services |
-| Agent runtime | Dedicated Node `agent-runner` worker, Anthropic SDK, MCP-style HTTP/JSON tool contracts |
-| Datastore | **Postgres 16 + pgvector + JSONB** (one-way door on schema) |
-| Cache/queue | Redis |
-| Deployment | Fly.io behind Cloudflare |
-| Object storage | S3-compatible |
-| Observability | OpenTelemetry → Grafana Cloud |
-| Secrets | Fly secrets + 1Password |
+| Layer          | Choice                                                                                  |
+| -------------- | --------------------------------------------------------------------------------------- |
+| Language       | TypeScript (Node 22 LTS)                                                                |
+| Framework      | Next.js (App Router) + Fastify for standalone services                                  |
+| Agent runtime  | Dedicated Node `agent-runner` worker, Anthropic SDK, MCP-style HTTP/JSON tool contracts |
+| Datastore      | **Postgres 16 + pgvector + JSONB** (one-way door on schema)                             |
+| Cache/queue    | Redis                                                                                   |
+| Deployment     | Fly.io behind Cloudflare                                                                |
+| Object storage | S3-compatible                                                                           |
+| Observability  | OpenTelemetry → Grafana Cloud                                                           |
+| Secrets        | Fly secrets + 1Password                                                                 |
 
 See [ADR-002](./ADR-002-repo-ci-workspace.md) for repo / CI / workspace decisions that follow from this foundation.

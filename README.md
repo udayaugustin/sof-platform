@@ -36,8 +36,8 @@ For a fresh Coder agent (human or AI). Each step is timed against a 30-minute to
 
 ```bash
 # 0 — Clone the repo                                                 (~30s)
-git clone git@github.com:software-company-ai/sof.git
-cd sof
+git clone https://github.com/udayaugustin/sof-platform.git
+cd sof-platform
 
 # 1 — Install dependencies (pnpm store is content-addressable, fast) (~60s)
 pnpm install --frozen-lockfile
@@ -67,15 +67,15 @@ If you exceeded 30 minutes, that's a bug in this onboarding — open an issue ag
 
 ### Required scripts
 
-| Script | What it does |
-|---|---|
-| `pnpm lint` | ESLint (flat config) — blocking |
-| `pnpm format` | Prettier check — blocking |
-| `pnpm typecheck` | `tsc -b` across workspaces |
-| `pnpm test` | Vitest across workspaces |
-| `pnpm ci` | All of the above in one shot — run this before pushing |
-| `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main` |
-| `scripts/prune-worktrees.sh` | Remove merged/old worktrees (runs nightly in CI cron) |
+| Script                                 | What it does                                           |
+| -------------------------------------- | ------------------------------------------------------ |
+| `pnpm lint`                            | ESLint (flat config) — blocking                        |
+| `pnpm format`                          | Prettier check — blocking                              |
+| `pnpm typecheck`                       | `tsc -b` across workspaces                             |
+| `pnpm test`                            | Vitest across workspaces                               |
+| `pnpm ci`                              | All of the above in one shot — run this before pushing |
+| `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main`        |
+| `scripts/prune-worktrees.sh`           | Remove merged/old worktrees (runs nightly in CI cron)  |
 
 ## Branching model
 
