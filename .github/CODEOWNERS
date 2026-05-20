@@ -1,9 +1,12 @@
-# Default: CTO reviews until specialized owners are hired
-*               @software-company-ai/cto
+# v0: human board (@udayaugustin) is the explicit CODEOWNER for all paths.
+# The original org-team handles (@software-company-ai/cto, /ceo) don't exist as
+# GitHub teams on udayaugustin/sof-platform, which silently disabled the
+# codeowner-review requirement. See SOF-23 / SOF-25.
+*               @udayaugustin
 
-# Architecture decisions: CTO + CEO
-/docs/adr/      @software-company-ai/cto @software-company-ai/ceo
+# Architecture decisions
+/docs/adr/      @udayaugustin
 
 # CI/infra
-/.github/       @software-company-ai/cto
-/fly.toml       @software-company-ai/cto
+/.github/       @udayaugustin
+/fly.toml       @udayaugustin
