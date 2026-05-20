@@ -17,7 +17,7 @@ coverage/
 # Paperclip-injected
 CLAUDE.md
 
-# Local-machine junk (developer-host artifacts, not project files)
-com.agilebits.op.501/
+# Local-machine junk (1Password CLI, system commandline, Node compile cache — not project files)
+com.agilebits.op.*/
 node-compile-cache/
 system-commandline-sentinel-files/
