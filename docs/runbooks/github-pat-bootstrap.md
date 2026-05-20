@@ -22,25 +22,25 @@ Settings to use:
 
 Grant exactly the permissions in this table. **Every row is load-bearing — a missing row will silently break a CLI/API call that a future agent run depends on.**
 
-| Permission | Access | Why we need it on day 1 |
-|---|---|---|
-| **Pull requests** | Read and write | Open, comment on, review, and merge PRs via `gh pr ...` and `POST /repos/.../pulls`. **Missing this is the SOF-18 failure mode** — `403 Resource not accessible by personal access token` on PR create. |
-| **Contents** | Read and write | Push branches (`git push`), read repo files via API, commit via REST. The most basic write scope; without it nothing works. |
-| **Workflows** | Read and write | Required when an agent PR touches any file under `.github/workflows/*.yml` (CI gates, release pipelines). Without it, pushes that include workflow edits are rejected even if `Contents: rw` is granted. SOF-10 hit this. |
-| **Actions** | Read | Read CI run status via `gh run list`, `gh run view`, and `GET /repos/.../actions/runs/...`. Required by any poll/wait loop that watches a workflow run. Reading run logs and re-running failed runs need this. |
-| **Metadata** | Read | Mandatory baseline — GitHub auto-grants this and it cannot be removed from a fine-grained PAT. Listed here so the checklist is complete. |
+| Permission         | Access         | Why we need it on day 1                                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Pull requests**  | Read and write | Open, comment on, review, and merge PRs via `gh pr ...` and `POST /repos/.../pulls`. **Missing this is the SOF-18 failure mode** — `403 Resource not accessible by personal access token` on PR create.                                                                                                                                                                                                |
+| **Contents**       | Read and write | Push branches (`git push`), read repo files via API, commit via REST. The most basic write scope; without it nothing works.                                                                                                                                                                                                                                                                            |
+| **Workflows**      | Read and write | Required when an agent PR touches any file under `.github/workflows/*.yml` (CI gates, release pipelines). Without it, pushes that include workflow edits are rejected even if `Contents: rw` is granted. SOF-10 hit this.                                                                                                                                                                              |
+| **Actions**        | Read           | Read CI run status via `gh run list`, `gh run view`, and `GET /repos/.../actions/runs/...`. Required by any poll/wait loop that watches a workflow run. Reading run logs and re-running failed runs need this.                                                                                                                                                                                         |
+| **Metadata**       | Read           | Mandatory baseline — GitHub auto-grants this and it cannot be removed from a fine-grained PAT. Listed here so the checklist is complete.                                                                                                                                                                                                                                                               |
 | **Administration** | Read and write | Required to **manage branch protection** (`PUT /repos/.../branches/{branch}/protection`), repo settings (visibility, default branch, topics), and to create new repos under the owner via `POST /user/repos` or `POST /orgs/.../repos`. Day-1 yes — SOF-10 used this to apply ADR-002 §6 branch protection. Drop to read-only only if branch protection / repo settings will be human-managed forever. |
 
 ### Optional / situational rows
 
 Add only if the listed workflow applies:
 
-| Permission | Access | When to add |
-|---|---|---|
-| **Issues** | Read and write | If agents will open/comment on GitHub issues (we currently use Paperclip issues, not GitHub issues — so leave **off** for now). |
-| **Deployments** | Read and write | When we wire a real deploy target (Fly.io, Render). Not needed yet. |
-| **Secrets** | Read | If we ever need to inspect Actions secrets programmatically (rare; usually managed via UI). |
-| **Webhooks** | Read and write | If an agent will configure webhooks (e.g. for ChatOps). Not needed yet. |
+| Permission      | Access         | When to add                                                                                                                     |
+| --------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Issues**      | Read and write | If agents will open/comment on GitHub issues (we currently use Paperclip issues, not GitHub issues — so leave **off** for now). |
+| **Deployments** | Read and write | When we wire a real deploy target (Fly.io, Render). Not needed yet.                                                             |
+| **Secrets**     | Read           | If we ever need to inspect Actions secrets programmatically (rare; usually managed via UI).                                     |
+| **Webhooks**    | Read and write | If an agent will configure webhooks (e.g. for ChatOps). Not needed yet.                                                         |
 
 ### Permissions to **leave off**
 

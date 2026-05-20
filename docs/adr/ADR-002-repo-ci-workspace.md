@@ -15,33 +15,33 @@ The bar: **a new engineering agent — human or AI — should go from clone to f
 
 ## Decision Summary
 
-| Layer | Choice | Reversibility |
-|---|---|---|
-| Repo hosting | **GitHub** under org `software-company-ai`, primary repo `sof` | Two-way door (mirror to GitLab if needed) |
-| Repo layout | **Monorepo (pnpm workspaces)**: `apps/web`, `apps/agent-runner`, `packages/shared`, `docs/adr/`, `scripts/` | Two-way door (split later behind clean package boundaries) |
-| Branching model | **Trunk-based** — short-lived branches off `main`, squash-merge PRs, no long-lived release branches yet | Two-way door |
-| CI | **GitHub Actions** — single `ci.yml` running lint → format → typecheck → test → hello-world smoke on every PR + push to `main` | Two-way door |
-| Package manager | **pnpm 9.12** (pinned in `packageManager`) | Two-way door (npm/yarn are drop-in) |
-| Language toolchain | TypeScript 5.6, Node 22, ESLint 9 (flat config), Prettier 3, Vitest 2 | Two-way door |
-| Dev workspace strategy | **`git_worktree`** — one worktree per active issue, branched off `main` | Two-way door (we can fall back to shared cwd if it bites us) |
-| Branch protection on `main` | Required: CI green, 1 approving review (CODEOWNERS), linear history | Two-way door |
-| First-PR target | **TTPR (time-to-first-PR) < 30 min wall, < 5 min hands-on** for a fresh Coder agent | Quality metric — tracked, not contractual |
+| Layer                       | Choice                                                                                                                         | Reversibility                                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| Repo hosting                | **GitHub** under org `software-company-ai`, primary repo `sof`                                                                 | Two-way door (mirror to GitLab if needed)                    |
+| Repo layout                 | **Monorepo (pnpm workspaces)**: `apps/web`, `apps/agent-runner`, `packages/shared`, `docs/adr/`, `scripts/`                    | Two-way door (split later behind clean package boundaries)   |
+| Branching model             | **Trunk-based** — short-lived branches off `main`, squash-merge PRs, no long-lived release branches yet                        | Two-way door                                                 |
+| CI                          | **GitHub Actions** — single `ci.yml` running lint → format → typecheck → test → hello-world smoke on every PR + push to `main` | Two-way door                                                 |
+| Package manager             | **pnpm 9.12** (pinned in `packageManager`)                                                                                     | Two-way door (npm/yarn are drop-in)                          |
+| Language toolchain          | TypeScript 5.6, Node 22, ESLint 9 (flat config), Prettier 3, Vitest 2                                                          | Two-way door                                                 |
+| Dev workspace strategy      | **`git_worktree`** — one worktree per active issue, branched off `main`                                                        | Two-way door (we can fall back to shared cwd if it bites us) |
+| Branch protection on `main` | Required: CI green, 1 approving review (CODEOWNERS), linear history                                                            | Two-way door                                                 |
+| First-PR target             | **TTPR (time-to-first-PR) < 30 min wall, < 5 min hands-on** for a fresh Coder agent                                            | Quality metric — tracked, not contractual                    |
 
 ## Decisions and rationale
 
 ### 1. Hosting: GitHub (boring infra lens)
 
-GitHub gives us mature CI runners, the broadest agent/SDK ecosystem support (CODEOWNERS, gh CLI, Actions, GraphQL API), and is what every coder agent and human contributor already knows. We don't need novel infra here — we need predictable infra that any new agent can be onboarded against in one heartbeat. *Boring infra; Time-to-first-PR; AI-native by default (gh CLI is the most agent-friendly forge API on the market).*
+GitHub gives us mature CI runners, the broadest agent/SDK ecosystem support (CODEOWNERS, gh CLI, Actions, GraphQL API), and is what every coder agent and human contributor already knows. We don't need novel infra here — we need predictable infra that any new agent can be onboarded against in one heartbeat. _Boring infra; Time-to-first-PR; AI-native by default (gh CLI is the most agent-friendly forge API on the market)._
 
 Provisioning is out-of-scope for me: see "Open questions for CEO" below.
 
 ### 2. Layout: pnpm monorepo
 
-A single repo with `apps/*` and `packages/*` lets us share types between the web surface and the agent runner without publishing internal packages. ADR-001 already names `agent-runner` as a distinct service; keeping it a workspace package today preserves the option to extract it cleanly later. pnpm was chosen for content-addressable installs (fast CI, small disk in worktrees) and first-class workspace support. *Pareto code lens — the runner and the data path live next to each other; cross-cutting refactors stay cheap.*
+A single repo with `apps/*` and `packages/*` lets us share types between the web surface and the agent runner without publishing internal packages. ADR-001 already names `agent-runner` as a distinct service; keeping it a workspace package today preserves the option to extract it cleanly later. pnpm was chosen for content-addressable installs (fast CI, small disk in worktrees) and first-class workspace support. _Pareto code lens — the runner and the data path live next to each other; cross-cutting refactors stay cheap._
 
 ### 3. Branching: trunk-based, squash-merge
 
-Short-lived branches (`<agent>/<issue>/<slug>`) merged via squashed PRs against `main`. No release branches, no gitflow. We can't afford merge-train complexity at zero users; we can re-introduce it the day we have paying customers and a release cadence. *Reversibility — trunk-based is the strict subset; we add ceremony only when forced.*
+Short-lived branches (`<agent>/<issue>/<slug>`) merged via squashed PRs against `main`. No release branches, no gitflow. We can't afford merge-train complexity at zero users; we can re-introduce it the day we have paying customers and a release cadence. _Reversibility — trunk-based is the strict subset; we add ceremony only when forced._
 
 ### 4. CI: GitHub Actions, one workflow, fast gate
 
@@ -53,11 +53,11 @@ Lint+format are blocking, not warning-only. We pay the cost up front so the agen
 
 The two real options:
 
-| Option | Pros | Cons | Verdict |
-|---|---|---|---|
+| Option                          | Pros                                                                                                                                                                           | Cons                                                                                                                                     | Verdict     |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | **`git_worktree` per issue** ✅ | Each agent gets an isolated working tree on the same repo; parallel issues do not block each other; matches Paperclip's per-issue execution model; cheap (shared object store) | More moving parts than a single cwd; agents must learn `git worktree add`/`remove` (one-time cost, baked into `scripts/new-worktree.sh`) | **Chosen.** |
-| Shared cwd, branch-switching | Simplest mental model; one checkout | Two agents on the same checkout will collide on uncommitted state; rebases mid-run; broken dev servers; defeats parallel execution | Rejected |
-| Per-issue full clone | Total isolation | Wastes disk + network for every spawn; CI cache miss every time | Rejected |
+| Shared cwd, branch-switching    | Simplest mental model; one checkout                                                                                                                                            | Two agents on the same checkout will collide on uncommitted state; rebases mid-run; broken dev servers; defeats parallel execution       | Rejected    |
+| Per-issue full clone            | Total isolation                                                                                                                                                                | Wastes disk + network for every spawn; CI cache miss every time                                                                          | Rejected    |
 
 `git_worktree` is the **lowest-friction way to give every agent a clean room** without paying full-clone cost. Failure mode: an agent abandons a worktree → `scripts/prune-worktrees.sh` (cron, runs nightly) garbage-collects worktrees whose branch is merged or older than 14 days.
 

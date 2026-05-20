@@ -50,6 +50,17 @@ make stop
 
 `make dev` runs `pnpm install` first, then `docker compose up -d` (Postgres + Redis), then `pnpm --parallel dev` across all apps.
 
+## Before you push
+
+Run the same gate CI runs:
+
+```bash
+make check        # format → lint → typecheck → test
+# equivalent: pnpm check
+```
+
+On `pnpm install`, the `prepare` script points `core.hooksPath` at `.githooks/`, which installs a `pre-push` hook that runs `make check` automatically. If it fails, fix the issue and push again — do not bypass with `--no-verify` unless you have a documented reason.
+
 ## Clone → First PR in one heartbeat
 
 For a fresh Coder agent (human or AI). Each step is timed against a 30-minute total budget.
@@ -87,15 +98,16 @@ If you exceeded 30 minutes, that's a bug in this onboarding — open an issue ag
 
 ### Required scripts
 
-| Script | What it does |
-|---|---|
-| `pnpm lint` | ESLint (flat config) — blocking |
-| `pnpm format` | Prettier check — blocking |
-| `pnpm typecheck` | `tsc -b` across workspaces |
-| `pnpm test` | Vitest across workspaces |
-| `pnpm ci` | All of the above in one shot — run this before pushing |
-| `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main` |
-| `scripts/prune-worktrees.sh` | Remove merged/old worktrees (runs nightly in CI cron) |
+| Script                                 | What it does                                           |
+| -------------------------------------- | ------------------------------------------------------ |
+| `pnpm lint`                            | ESLint (flat config) — blocking                        |
+| `pnpm format`                          | Prettier check — blocking                              |
+| `pnpm typecheck`                       | `tsc -b` across workspaces                             |
+| `pnpm test`                            | Vitest across workspaces                               |
+| `pnpm ci`                              | All of the above in one shot — run this before pushing |
+| `pnpm check` / `make check`            | Same gate as CI; also runs automatically via pre-push  |
+| `scripts/new-worktree.sh SOF-### slug` | Create an isolated worktree branched off `main`        |
+| `scripts/prune-worktrees.sh`           | Remove merged/old worktrees (runs nightly in CI cron)  |
 
 ## Branching model
 

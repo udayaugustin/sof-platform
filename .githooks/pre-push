@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# SOF pre-push hook — runs the same gate CI runs (format → lint → typecheck → test).
+# Bypass with `git push --no-verify` only when you know what you're doing.
+set -euo pipefail
+
+echo "[pre-push] make check (format → lint → typecheck → test)"
+if command -v make >/dev/null 2>&1; then
+  make check
+else
+  pnpm format
+  pnpm lint
+  pnpm typecheck
+  pnpm test
+fi
