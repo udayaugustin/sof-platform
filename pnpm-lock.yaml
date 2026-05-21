@@ -32,9 +32,15 @@ importers:
 
   apps/agent-runner:
     dependencies:
+      '@sof/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@sof/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@sof/tool-contracts':
+        specifier: workspace:*
+        version: link:../../packages/tool-contracts
 
   apps/web:
     dependencies:
